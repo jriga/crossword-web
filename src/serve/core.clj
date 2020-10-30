@@ -1,13 +1,12 @@
 (ns serve.core
-  (:require [org.httpkit.server :as server]
+  (:require ;;[org.httpkit.server :as server]
+            [ring.adapter.jetty :as jetty]
             [compojure.core :refer :all]
             [compojure.route :as route]
             [ring.middleware.defaults :refer :all]
-            [clojure.pprint :as pp]
             [clojure.string :as str]
             [clojure.data.json :as json]
-            [crossword.core :as cw])
-  (:gen-class))
+            [crossword.core :as cw]))
 
 
 (defn simple-body-page [req]
@@ -35,10 +34,12 @@
   (route/not-found "Error, page not found!"))
 
 (defn -main
-  [& args]
-  (let [port (Integer/parseInt (or (System/getenv "PORT") "3000"))]
-    (server/run-server (wrap-defaults #'app-routes api-defaults) {:port port})
-    ; Run the server without ring defaults
-    ;(server/run-server #'app-routes {:port port})
-    (println (str "Running webserver at http:/127.0.0.1:" port "/"))))
+  [& [port]]
+  (let [port (Integer. (or port (env :port) 5000))]
+    (jetty/run-jetty (wrap-defaults #'app-routes api-defaults) {:port port :join? false})))
+
+;; For interactive development:
+;; (.stop server)
+;; (def server (-main))
+
 

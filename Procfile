@@ -1,0 +1,1 @@
+web: java $JVM_OPTS -cp target/serve-standalone.jar clojure.main -m serve.core

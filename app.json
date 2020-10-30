@@ -1,0 +1,6 @@
+{
+  "name": "Serve crossword",
+  "description": "Serve vuejs clojurescript grid",
+  "image": "heroku/clojure",
+  "addons": [ ]
+}
